@@ -1,0 +1,27 @@
+// sass variables for responsive breakpoints from tailwindcss
+// https://tailwindcss.com/docs/screens
+$sm: 640px,
+$md: 768px,
+$lg: 1024px,
+$xl: 1280px,
+$xxl: 1536px,
+
+=sm
+  @media screen and (min-width: $sm) 
+    @content
+
+=md
+  @media screen and (min-width: $md) 
+    @content
+
+=lg
+  @media screen and (min-width: $lg) 
+    @content
+
+=xl
+  @media screen and (min-width: $xl) 
+    @content
+
+=xxl
+  @media screen and (min-width: $xxl) 
+    @content
