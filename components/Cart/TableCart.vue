@@ -63,11 +63,12 @@
         </td>
         <td>{{ cartProduct.product.price * cartProduct.quantity }}</td>
         <td>
-          <img
-            alt="delete"
+          <button
             class="cart-list-item__action"
             @click="remove(cartProduct.id)"
-          />
+          >
+            Delete
+          </button>
         </td>
       </tr>
     </tbody>

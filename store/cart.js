@@ -35,6 +35,10 @@ export const mutations = {
         state.cart[index].quantity--
       }
     }
+  },
+  removeProduct(state, payload) {
+    const index = state.cart.findIndex(item => item.id === payload.id)
+    state.cart.splice(index, 1)
   }
 }
 
