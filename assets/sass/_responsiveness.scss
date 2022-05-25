@@ -1,0 +1,37 @@
+// sass variables for responsive breakpoints from tailwindcss
+// https://tailwindcss.com/docs/screens
+$sm-breakpoints: 640px;
+$md-breakpoints: 768px;
+$lg-breakpoints: 1024px;
+$xl-breakpoints: 1280px;
+$xxl-breakpoints: 1536px;
+
+@mixin sm-breakpoints {
+  @media screen and (min-width: $sm-breakpoints) {
+    @content;
+  }
+}
+
+@mixin md-breakpoints {
+  @media screen and (min-width: $md-breakpoints) {
+    @content;
+  }
+}
+
+@mixin lg-breakpoints {
+  @media screen and (min-width: $lg-breakpoints) {
+    @content;
+  }
+}
+
+@mixin xl-breakpoints {
+  @media screen and (min-width: $xl-breakpoints) {
+    @content;
+  }
+}
+
+@mixin xxl-breakpoints {
+  @media screen and (min-width: $xxl-breakpoints) {
+    @content;
+  }
+}
