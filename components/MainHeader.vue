@@ -11,7 +11,7 @@
           <nuxt-link class="brand__link" to="/">
             <img
               class="brand__logo"
-              src="https://cdn.cdnlogo.com/logos/n/67/nike.svg"
+              src="https://cdn.cdnlogo.com/logos/a/28/alcunha-clothing.svg"
               alt="logo Brand"
             />
           </nuxt-link>
