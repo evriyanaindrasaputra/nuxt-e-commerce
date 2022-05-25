@@ -1,6 +1,7 @@
 export const state = () => ({
   products: null,
-  product: null
+  product: null,
+  isLoading: false,
 })
 
 
@@ -10,6 +11,9 @@ export const getters = {
   },
   getProduct(state) {
     return state.product
+  },
+  isLoading(state) {
+    return state.isLoading
   }
 }
 
@@ -19,6 +23,9 @@ export const mutations = {
   },
   setProduct(state, payload) {
     state.product = payload
+  },
+  setLoading(state, payload) {
+    state.isLoading = payload
   }
 }
 
@@ -27,11 +34,14 @@ export const mutations = {
 export const actions = {
   async fetchProducts({ commit }, filter) {
     try {
+      commit('setLoading', true)
       const { data } = await this.$axios.get('/products', { params: { filter } })
       commit('setProducts', data)
       return data
     } catch (error) {
       throw new Error(error)
+    } finally {
+      commit('setLoading', false)
     }
   },
   async fetchProductById({ commit }, id) {

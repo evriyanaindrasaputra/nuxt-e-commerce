@@ -1,8 +1,10 @@
 <template>
   <div>
-    <TabelCart v-if="cartProducts.length > 0" />
+    <div v-if="cartProducts.length > 0">
+      <TabelCart />
+    </div>
     <div v-else>
-      <p>Your cart is empty</p>
+      <p class="cart-empty">Your cart is empty</p>
     </div>
   </div>
 </template>
@@ -21,3 +23,11 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.cart-empty {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 2rem;
+}
+</style>

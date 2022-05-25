@@ -2,7 +2,7 @@
   <div class="container">
     <div class="container__inner">
       <div class="lists">
-        <template v-if="products">
+        <template v-if="!isLoading && products">
           <span
             v-for="item in products.results"
             :key="item.id"
@@ -19,6 +19,9 @@
               {{ item.price }}
             </p>
           </span>
+        </template>
+        <template v-else>
+          <SkeletonBox v-for="item in [1, 2, 3, 4]" :key="item" />
         </template>
       </div>
     </div>
@@ -40,7 +43,7 @@
               odio voluptatem autem hic ipsum.
             </p>
 
-            <div class="field">
+            <div v-if="selectedColor" class="field">
               <label class="field__label">Select a color:</label>
               <select v-model="selectedColor" class="field__input">
                 <option
@@ -88,8 +91,10 @@
 </template>
 <script>
 import ModalProduct from '~/components/Modals/ModalProduct.vue'
+import SkeletonBox from '~/components/Loader/SkeletonBox.vue'
+
 export default {
-  components: { ModalProduct },
+  components: { ModalProduct, SkeletonBox },
   data() {
     return {
       isModalVisible: false,
@@ -98,6 +103,9 @@ export default {
     }
   },
   computed: {
+    isLoading() {
+      return this.$store.getters['products/isLoading']
+    },
     products() {
       return this.$store.getters['products/getProducts']
     },
@@ -105,17 +113,21 @@ export default {
       return this.$store.getters['products/getProduct']
     },
     sizes() {
-      const variant = this.product.variants.find(
-        (item) => item.color === this.selectedColor
-      )
-      return variant.available_sizes.split(', ')
+      if (this.selectedColor) {
+        const variant = this.product.variants.find(
+          (item) => item.color === this.selectedColor
+        )
+        return variant.available_sizes.split(', ')
+      } else {
+        return []
+      }
     }
   },
   methods: {
     async handleSelectProduct(product) {
       try {
         await this.$store.dispatch('products/fetchProductById', product.id)
-        this.selectedColor = this.product.variants[0].color
+        this.selectedColor = this.product?.variants[0]?.color || null
         this.toggleModal()
       } catch (error) {
         this.$toast.error(error.message)
@@ -137,7 +149,9 @@ export default {
         if (item) {
           this.$store.dispatch('cart/updateCartItem', {
             id: item.id,
-            quantity: item.quantity + 1
+            quantity: item.quantity + 1,
+            size: this.selectedSize,
+            color: this.selectedColor
           })
         } else {
           this.$store.dispatch('cart/addToCart', {

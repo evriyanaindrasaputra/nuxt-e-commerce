@@ -19,12 +19,12 @@ export const mutations = {
   },
   setUpdateCartItem(state, cart) {
     // find cart item by id and update quantity
-    const index = state.cart.findIndex(item => item.id === cart.id)
+    const index = state.cart.findIndex(item => item.id === cart.id && item.size === cart.size && item.color === cart.color)
     state.cart[index].quantity = cart.quantity
   },
   changeProductQty(state, payload) {
     // find cart item by id and update quantity
-    const index = state.cart.findIndex(item => item.id === payload.id)
+    const index = state.cart.findIndex(item => item.id === payload.unix.id && item.size === payload.unix.size && item.color === payload.unix.color)
     if (payload.type === 'add') {
       return state.cart[index].quantity++
     } else if (payload.type === 'dec') {
@@ -37,7 +37,7 @@ export const mutations = {
     }
   },
   removeProduct(state, payload) {
-    const index = state.cart.findIndex(item => item.id === payload.id)
+    const index = state.cart.findIndex(item => item.id === payload.unix.id && item.size === payload.unix.size && item.color === payload.unix.color)
     state.cart.splice(index, 1)
   }
 }

@@ -19,10 +19,7 @@
         <td class="cart-list-item__image">
           <nuxt-link
             :to="{
-              name: 'products-product',
-              params: {
-                product: `${cartProduct.product.slug}-${cartProduct.product.id}`
-              }
+              name: 'index'
             }"
           >
             <img :src="`${cartProduct.product.images[0]}?width=60`" />
@@ -45,8 +42,18 @@
         <td>
           <div class="cart-list-item__qty-block">
             <button
-              class="cart-list-item__action"
-              @click="changeQty(cartProduct.id, 'dec', 1)"
+              class="cart-list-item__action dec"
+              @click="
+                changeQty(
+                  {
+                    id: cartProduct.id,
+                    size: cartProduct.size,
+                    color: cartProduct.color
+                  },
+                  'dec',
+                  1
+                )
+              "
             >
               -
             </button>
@@ -54,8 +61,18 @@
               cartProduct.quantity
             }}</span>
             <button
-              class="cart-list-item__action"
-              @click="changeQty(cartProduct.id, 'add', 1)"
+              class="cart-list-item__action asc"
+              @click="
+                changeQty(
+                  {
+                    id: cartProduct.id,
+                    size: cartProduct.size,
+                    color: cartProduct.color
+                  },
+                  'add',
+                  1
+                )
+              "
             >
               +
             </button>
@@ -64,8 +81,14 @@
         <td>{{ cartProduct.product.price * cartProduct.quantity }}</td>
         <td>
           <button
-            class="cart-list-item__action"
-            @click="remove(cartProduct.id)"
+            class="cart-list-item__action del"
+            @click="
+              remove({
+                id: cartProduct.id,
+                size: cartProduct.size,
+                color: cartProduct.color
+              })
+            "
           >
             Delete
           </button>
@@ -97,11 +120,11 @@ export default {
     }
   },
   methods: {
-    changeQty(id, type, step) {
-      this.$store.commit('cart/changeProductQty', { id, type, step })
+    changeQty(unix, type, step) {
+      this.$store.commit('cart/changeProductQty', { unix, type, step })
     },
-    remove(id) {
-      this.$store.commit('cart/removeProduct', { id })
+    remove(unix) {
+      this.$store.commit('cart/removeProduct', { unix })
     }
   }
 }
@@ -134,13 +157,17 @@ export default {
     border-bottom: 1px solid #ddd;
     border-top: 1px solid #ddd;
     padding: 1rem 0;
+    text-align: center;
     strong {
       font-weight: 500;
     }
     & > td {
       padding: 1rem 0.5rem;
       @include md-breakpoints {
-        min-width: math.div(($max-width-xl), 6);
+        min-width: math.div(($max-width-3xl), 6);
+      }
+      @include lg-breakpoints {
+        min-width: math.div(($max-width-6xl), 6);
       }
     }
     &__image {
@@ -155,6 +182,7 @@ export default {
       &-block {
         display: flex;
         align-items: center;
+        justify-content: center;
       }
     }
     &__action {
@@ -163,6 +191,18 @@ export default {
       cursor: pointer;
       padding: 10px;
       border-radius: 10px;
+      &.asc {
+        background-color: rgb(101, 245, 76);
+        color: #fff;
+      }
+      &.dec {
+        background-color: rgb(245, 177, 76);
+        color: #fff;
+      }
+      &.del {
+        background-color: rgb(243, 62, 62);
+        color: #fff;
+      }
     }
   }
 }
