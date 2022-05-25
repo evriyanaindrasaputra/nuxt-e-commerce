@@ -4,19 +4,19 @@
       <div class="lists">
         <template v-if="products">
           <span
-            v-for="product in products.results"
-            :key="product.id"
+            v-for="item in products.results"
+            :key="item.id"
             class="list"
-            @click="handleSelectProduct(product)"
+            @click="handleSelectProduct(item)"
           >
             <div class="list__img">
-              <img :src="product.images[0]" :alt="product.title" />
+              <img :src="item.images[0]" :alt="item.title" />
             </div>
             <h3 class="list__header">
-              {{ product.title }}
+              {{ item.title }}
             </h3>
             <p class="list__price">
-              {{ product.price }}
+              {{ item.price }}
             </p>
           </span>
         </template>
@@ -39,43 +39,49 @@
               repudiandae eaque autem harum! Architecto neque sint distinctio
               odio voluptatem autem hic ipsum.
             </p>
-            <div v-if="product.variants && product.variants.length > 0">
-              <div class="field">
-                <label class="field__label">Select a color:</label>
-                <select v-model="selectedColor" class="field__input">
-                  <option
-                    v-for="variant in product.variants"
-                    :key="variant.id"
-                    :value="variant.color"
-                  >
-                    {{ variant.color }}
-                  </option>
-                </select>
-              </div>
-              <div v-if="sizes.length > 0" class="radio-buttons">
-                <div class="radio-buttons__header">Select a size:</div>
-                <div
-                  v-for="size in sizes"
-                  :key="size"
-                  class="radio-buttons__option"
+
+            <div class="field">
+              <label class="field__label">Select a color:</label>
+              <select v-model="selectedColor" class="field__input">
+                <option
+                  v-for="variant in product.variants"
+                  :key="variant.id"
+                  :value="variant.color"
                 >
-                  <input
-                    :id="`size-${size}`"
-                    v-model="selectedSize"
-                    type="radio"
-                    name="size"
-                    :value="size"
-                  />
-                  <label :for="`size-${size}`">{{ size }}</label>
-                </div>
+                  {{ variant.color }}
+                </option>
+              </select>
+            </div>
+            <div v-if="sizes.length > 0" class="radio-buttons">
+              <div class="radio-buttons__header">Select a size:</div>
+              <div
+                v-for="size in sizes"
+                :key="size"
+                class="radio-buttons__option"
+              >
+                <input
+                  :id="`size-${size}`"
+                  v-model="selectedSize"
+                  type="radio"
+                  name="size"
+                  :value="size"
+                />
+                <label :for="`size-${size}`">{{ size }}</label>
               </div>
+            </div>
+            <!-- price -->
+            <div class="price">
+              <label class="price__label">Price:</label>
+              <span class="price__value">
+                {{ product.price }}
+              </span>
             </div>
           </div>
         </section>
       </template>
 
       <template #footer>
-        <button class="btn__cart">Add to Cart</button>
+        <button class="btn__cart" @click="handleAddToCart">Add to Cart</button>
       </template>
     </ModalProduct>
   </div>
@@ -99,9 +105,6 @@ export default {
       return this.$store.getters['products/getProduct']
     },
     sizes() {
-      if (!this.selectedColor) {
-        return []
-      }
       const variant = this.product.variants.find(
         (item) => item.color === this.selectedColor
       )
@@ -112,13 +115,22 @@ export default {
     async handleSelectProduct(product) {
       try {
         await this.$store.dispatch('products/fetchProductById', product.id)
+        this.selectedColor = this.product.variants[0].color
         this.toggleModal()
       } catch (error) {
-        console.error(error)
+        this.$toast.error(error.message)
       }
     },
     toggleModal() {
       this.isModalVisible = !this.isModalVisible
+    },
+    handleAddToCart() {
+      if (this.selectedSize) {
+        this.toggleModal()
+        this.$toast.success('Hello!')
+      } else {
+        this.$toast.error('Please select a size')
+      }
     }
   }
 }
@@ -295,6 +307,19 @@ export default {
             background: #f5f4f2;
           }
         }
+      }
+    }
+    .price {
+      padding: 5px 0;
+      margin-bottom: 5px;
+      &__label {
+        padding-bottom: 5px;
+        font-weight: 500;
+        font-size: 16px;
+        padding-right: 10px;
+      }
+      &__value {
+        font-size: 16px;
       }
     }
   }

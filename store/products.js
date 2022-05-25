@@ -38,7 +38,6 @@ export const actions = {
     try {
       const { data } = await this.$axios.get(`/products/${id}`, { params: { expand: 'variants' } })
       commit('setProduct', data)
-      console.log(data)
       return data
     } catch (error) {
       throw new Error(error)
