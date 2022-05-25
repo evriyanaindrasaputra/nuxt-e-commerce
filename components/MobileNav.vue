@@ -30,12 +30,12 @@ export default {
       navItems: [
         {
           name: 'T-shirts',
-          slug: '/t-shirts',
+          slug: 't-shirts',
           id: 'Ro3bnjx'
         },
         {
           name: 'Jackets',
-          slug: '/jackets',
+          slug: 'jackets',
           id: '5xARezo'
         }
       ]
@@ -84,13 +84,16 @@ export default {
     border-radius: 5px;
     transition: all 0.5s ease;
     text-decoration: none;
-    background: red;
 
     &:hover {
       background: $light-orange;
     }
     &:not(:last-child) {
       margin-bottom: 30px;
+    }
+    &.nuxt-link-active {
+      color: $veryDarkBlue;
+      background: $light-orange;
     }
   }
 
