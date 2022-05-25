@@ -17,7 +17,7 @@
           </nuxt-link>
         </div>
         <MainNav :is-mobile="isMobile" />
-        <HeaderActions :cart-count="cartCount" @toggleCart="toggleCart" />
+        <HeaderActions />
       </div>
     </header>
     <MobileNav :is-open="isOpen" @toggleMobileMenu="toggleMobileMenu" />
@@ -26,21 +26,6 @@
 
 <script>
 export default {
-  props: {
-    cartProducts: {
-      type: Array,
-      default: () => []
-    },
-    cartCount: {
-      type: Number,
-      default: 0
-    },
-    toggleCart: {
-      type: Function,
-      default: () => {}
-    }
-  },
-  emits: ['toggleCart', 'deleteItem'],
   data() {
     return {
       isMobile: false,
@@ -66,9 +51,6 @@ export default {
       } else {
         document.body.style.overflow = 'scroll'
       }
-    },
-    deleteItem() {
-      this.$emit('deleteItem')
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="actions">
     <div class="cart">
-      <button class="cart__btn" aria-label="open cart" @click="toggleCart">
+      <button class="cart__btn">
         <span v-if="cartCount > 0" class="cart-count">{{ cartCount }}</span>
         <img
           class="cart__icon"
@@ -16,16 +16,10 @@
 <script>
 export default {
   name: 'HeaderActions',
-  props: {
-    cartCount: {
-      type: Number,
-      default: 0
-    }
-  },
-  emits: ['toggleCart'],
-  methods: {
-    toggleCart() {
-      this.$emit('toggleCart')
+  computed: {
+    cartCount() {
+      // getters.getCart length
+      return this.$store.getters['cart/getCart'].length
     }
   }
 }
@@ -61,7 +55,10 @@ export default {
         color: $white;
         border-radius: 10px;
         width: 20px;
-        height: 15px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-size: 10px;
         font-weight: bold;
       }

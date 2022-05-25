@@ -126,8 +126,33 @@ export default {
     },
     handleAddToCart() {
       if (this.selectedSize) {
+        const cartItem = this.$store.getters['cart/getCart']
+        // check if the item is already in the cart by id color and size
+        const item = cartItem.find(
+          (item) =>
+            item.id === this.product.id &&
+            item.color === this.selectedColor &&
+            item.size === this.selectedSize
+        )
+        console.log(item)
+        if (item) {
+          console.log('ada')
+          this.$store.dispatch('cart/updateCartItem', {
+            id: item.id,
+            quantity: item.quantity + 1
+          })
+        } else {
+          this.$store.dispatch('cart/addToCart', {
+            id: this.product.id,
+            title: this.product.title,
+            price: this.product.price,
+            quantity: 1,
+            color: this.selectedColor,
+            size: this.selectedSize
+          })
+        }
         this.toggleModal()
-        this.$toast.success('Hello!')
+        this.$toast.success('Product added to cart')
       } else {
         this.$toast.error('Please select a size')
       }
