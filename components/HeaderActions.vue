@@ -1,7 +1,7 @@
 <template>
   <div class="actions">
     <div class="cart">
-      <button class="cart__btn">
+      <button class="cart__btn" @click="handleNavigateCart">
         <span v-if="cartCount > 0" class="cart-count">{{ cartCount }}</span>
         <img
           class="cart__icon"
@@ -20,6 +20,11 @@ export default {
     cartCount() {
       // getters.getCart length
       return this.$store.getters['cart/getCart'].length
+    }
+  },
+  methods: {
+    handleNavigateCart() {
+      this.$router.push('/cart')
     }
   }
 }

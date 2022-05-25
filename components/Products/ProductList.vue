@@ -134,15 +134,14 @@ export default {
             item.color === this.selectedColor &&
             item.size === this.selectedSize
         )
-        console.log(item)
         if (item) {
-          console.log('ada')
           this.$store.dispatch('cart/updateCartItem', {
             id: item.id,
             quantity: item.quantity + 1
           })
         } else {
           this.$store.dispatch('cart/addToCart', {
+            product: this.product,
             id: this.product.id,
             title: this.product.title,
             price: this.product.price,

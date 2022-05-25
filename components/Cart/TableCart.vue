@@ -1,0 +1,168 @@
+<template>
+  <table class="cart-list">
+    <thead>
+      <tr class="cart-list-header">
+        <th />
+        <th>title</th>
+        <th>price</th>
+        <th>quantity</th>
+        <th>total</th>
+        <th />
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="cartProduct in cartProducts"
+        :key="cartProduct.key"
+        class="cart-list-item"
+      >
+        <td class="cart-list-item__image">
+          <nuxt-link
+            :to="{
+              name: 'products-product',
+              params: {
+                product: `${cartProduct.product.slug}-${cartProduct.product.id}`
+              }
+            }"
+          >
+            <img :src="`${cartProduct.product.images[0]}?width=60`" />
+          </nuxt-link>
+        </td>
+        <td>
+          {{ cartProduct.product.title }}
+          <span
+            v-if="
+              cartProduct.product.variants &&
+              cartProduct.product.variants.length > 0
+            "
+          >
+            (color: <strong>{{ cartProduct.color }}</strong
+            >, size: <strong>{{ cartProduct.size }}</strong
+            >)
+          </span>
+        </td>
+        <td>{{ cartProduct.product.price }}</td>
+        <td>
+          <div class="cart-list-item__qty-block">
+            <button
+              class="cart-list-item__action"
+              @click="changeQty(cartProduct.id, 'dec', 1)"
+            >
+              -
+            </button>
+            <span class="cart-list-item__qty-count">{{
+              cartProduct.quantity
+            }}</span>
+            <button
+              class="cart-list-item__action"
+              @click="changeQty(cartProduct.id, 'add', 1)"
+            >
+              +
+            </button>
+          </div>
+        </td>
+        <td>{{ cartProduct.product.price * cartProduct.quantity }}</td>
+        <td>
+          <img
+            alt="delete"
+            class="cart-list-item__action"
+            @click="remove(cartProduct.id)"
+          />
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr class="cart-list-footer">
+        <td />
+        <td>Total</td>
+        <td />
+        <td />
+        <td>{{ cartTotal }}</td>
+        <td />
+      </tr>
+    </tfoot>
+  </table>
+</template>
+
+<script>
+export default {
+  name: 'CartProductsList',
+  computed: {
+    cartProducts() {
+      return this.$store.getters['cart/getCart']
+    },
+    cartTotal() {
+      return this.$store.getters['cart/getTotalPriceCart']
+    }
+  },
+  methods: {
+    changeQty(id, type, step) {
+      this.$store.commit('cart/changeProductQty', { id, type, step })
+    },
+    remove(id) {
+      this.$store.commit('cart/removeProduct', { id })
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+@use 'sass:math';
+@import '~/assets/sass/initial-variables';
+@import '~/assets/sass/responsiveness';
+
+.cart-list {
+  width: 100%;
+  @include md-breakpoints {
+    display: block;
+    overflow-x: auto;
+  }
+  &-header {
+    & > th {
+      padding: 0.5rem;
+    }
+  }
+  &-footer {
+    & > td {
+      padding: 0.8rem 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+  }
+  &-item {
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    padding: 1rem 0;
+    strong {
+      font-weight: 500;
+    }
+    & > td {
+      padding: 1rem 0.5rem;
+      @include md-breakpoints {
+        min-width: math.div(($max-width-xl), 6);
+      }
+    }
+    &__image {
+      img {
+        max-height: 70px;
+      }
+    }
+    &__qty {
+      &-count {
+        padding: 0 10px;
+      }
+      &-block {
+        display: flex;
+        align-items: center;
+      }
+    }
+    &__action {
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 10px;
+    }
+  }
+}
+</style>
