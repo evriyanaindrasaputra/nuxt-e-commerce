@@ -4,7 +4,10 @@
       <nuxt-link
         v-for="item in navItems"
         :key="item.name"
-        :to="item.slug"
+        :to="{
+          name: 'categories-category',
+          params: { category: `${item.slug}-${item.id}` }
+        }"
         class="nav__list-item"
       >
         <span class="nav__list-link">{{ item.name }}</span>
@@ -23,20 +26,14 @@ export default {
     return {
       navItems: [
         {
-          name: 'Men',
-          slug: '/men'
+          name: 'T-shirts',
+          slug: 't-shirts',
+          id: 'Ro3bnjx'
         },
         {
-          name: 'Woman',
-          slug: '/woman'
-        },
-        {
-          name: 'Kids',
-          slug: '/kids'
-        },
-        {
-          name: 'Unisex',
-          slug: '/unisex'
+          name: 'Jackets',
+          slug: 'jackets',
+          id: '5xARezo'
         }
       ]
     }
@@ -55,23 +52,26 @@ export default {
   }
 
   &__list-item {
+    padding: 20px;
+    border-radius: 5px;
+    transition: all 1s ease;
+
     &:not(:last-child) {
       margin-right: 30px;
     }
-  }
-
-  &__list-link {
-    color: $darkGrayishBlue;
-    position: relative;
-    transition: all 1s ease;
-    padding: 20px;
-    border-radius: 5px;
-
     &:hover {
       color: $veryDarkBlue;
       background: $light-orange;
       transition: all 1s ease;
     }
+    &.nuxt-link-active {
+      color: $veryDarkBlue;
+      background: $light-orange;
+    }
+  }
+
+  &__list-link {
+    color: $darkGrayishBlue;
   }
 }
 </style>

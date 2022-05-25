@@ -5,7 +5,10 @@
         <nuxt-link
           v-for="item in navItems"
           :key="item.name"
-          :to="item.slug"
+          :to="{
+            name: 'categories-category',
+            params: { category: `${item.slug}-${item.id}` }
+          }"
           class="mobile__list-item"
         >
           <span class="mobile__list-link">{{ item.name }}</span>
@@ -26,20 +29,14 @@ export default {
     return {
       navItems: [
         {
-          name: 'Men',
-          slug: '/men'
+          name: 'T-shirts',
+          slug: '/t-shirts',
+          id: 'Ro3bnjx'
         },
         {
-          name: 'Woman',
-          slug: '/woman'
-        },
-        {
-          name: 'Kids',
-          slug: '/kids'
-        },
-        {
-          name: 'Unisex',
-          slug: '/unisex'
+          name: 'Jackets',
+          slug: '/jackets',
+          id: '5xARezo'
         }
       ]
     }

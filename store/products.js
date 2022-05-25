@@ -25,9 +25,9 @@ export const mutations = {
 
 
 export const actions = {
-  async fetchProducts({ commit }) {
+  async fetchProducts({ commit }, filter) {
     try {
-      const { data } = await this.$axios.get('/products')
+      const { data } = await this.$axios.get('/products', { params: { filter } })
       commit('setProducts', data)
       return data
     } catch (error) {

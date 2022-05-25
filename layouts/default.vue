@@ -10,6 +10,16 @@ export default {
   name: 'MainLayout',
   data() {
     return {}
+  },
+  computed: {
+    categories() {
+      return this.$store.getters['categories/getCategories']
+    }
+  },
+  created() {
+    if (!this.categories) {
+      this.$store.dispatch('categories/fetchCategories')
+    }
   }
 }
 </script>
